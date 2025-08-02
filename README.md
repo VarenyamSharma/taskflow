@@ -1,15 +1,16 @@
 # TaskFlow - Full-Stack Task Management System
 
-A modern, full-featured task management application built with React, TypeScript, and Tailwind CSS. This project demonstrates a complete full-stack architecture with authentication, CRUD operations, advanced filtering, and a beautiful responsive UI.
+A modern, full-featured task management application built with React, TypeScript, Node.js, MongoDB, and Tailwind CSS. This project demonstrates a complete full-stack architecture with secure authentication, CRUD operations, advanced filtering, and a beautiful responsive UI.
 
 ## ✨ Features
 
 ### 🔐 Authentication & Security
-- JWT-based authentication system
-- User registration and login
+- JWT-based authentication system with MongoDB token storage
+- Secure refresh token mechanism
+- User registration and login with MongoDB persistence
 - Protected routes and middleware
-- Secure password hashing (simulated bcrypt)
-- Automatic token validation and refresh
+- Secure password hashing with bcrypt
+- Token validation and automatic refresh
 
 ### 📋 Task Management
 - Create, read, update, and delete tasks
@@ -17,6 +18,7 @@ A modern, full-featured task management application built with React, TypeScript
 - Priority levels: Low, Medium, High
 - Status tracking: To Do, In Progress, Completed
 - User-specific task isolation
+- MongoDB persistence for reliable data storage
 
 ### 🔍 Advanced Features
 - Real-time search functionality
@@ -24,27 +26,48 @@ A modern, full-featured task management application built with React, TypeScript
 - Sort by multiple criteria (date, title, priority, status)
 - Comprehensive task statistics dashboard
 - Responsive mobile-first design
+- User preferences stored in MongoDB
 
 ### 🎨 Modern UI/UX
-- Light/Dark theme toggle with persistence
+- Light/Dark theme toggle with server-side persistence
 - Beautiful animations and micro-interactions
 - Professional color palette and typography
 - Accessible design patterns
 - Mobile-responsive layout
 
 ### 🏗️ Technical Architecture
-- React 18 with TypeScript
+- React 18 with TypeScript for frontend
+- Node.js and Express for backend
+- MongoDB with Mongoose for data persistence
+- JWT-based authentication with refresh tokens
 - Context API for global state management
 - Custom hooks for business logic
 - Modular component architecture
 - Tailwind CSS for styling
-- LocalStorage for data persistence (simulating database)
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 - Node.js 18+
+- MongoDB 4.4+
 - npm or yarn
+
+### Environment Setup
+
+1. Create `.env` file in the server directory:
+```env
+PORT=5000
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+JWT_REFRESH_SECRET=your_refresh_token_secret
+NODE_ENV=development
+CLIENT_URL=http://localhost:5173
+```
+
+2. Create `.env` file in the root directory:
+```env
+VITE_API_URL=http://localhost:5000/api
+```
 
 ### Installation
 
@@ -54,50 +77,100 @@ git clone <repository-url>
 cd taskflow
 ```
 
-2. Install dependencies:
+2. Install backend dependencies:
 ```bash
+cd server
 npm install
 ```
 
-3. Start the development server:
+3. Install frontend dependencies:
 ```bash
+cd ..
+npm install
+```
+
+4. Start the backend server:
+```bash
+cd server
 npm run dev
 ```
 
-4. Open your browser and navigate to `http://localhost:5173`
+5. Start the frontend development server:
+```bash
+cd ..
+npm run dev
+```
+
+6. Open your browser and navigate to `http://localhost:5173`
 
 ## 📱 Usage
 
 ### Getting Started
-1. **Register**: Create a new account or login with existing credentials
-2. **Dashboard**: View your task statistics and overview
+1. **Register/Login**: Create a new account or login with existing credentials
+2. **Dashboard**: View your task statistics and personalized overview
 3. **Create Tasks**: Click "New Task" to add tasks with title, description, priority, and status
 4. **Manage Tasks**: Edit, update, or delete tasks using the card actions
 5. **Filter & Search**: Use the advanced filtering system to find specific tasks
-6. **Theme**: Toggle between light and dark modes using the theme switcher
+6. **Theme**: Toggle between light and dark modes (automatically synced across devices)
+7. **Preferences**: Customize your experience with persistent user preferences
 
-### Task Properties
+### Features Overview
+
+#### Authentication
+- Secure JWT-based authentication
+- Token refresh mechanism for persistent sessions
+- Server-side token storage and validation
+
+#### Task Management
 - **Title**: Brief description of the task (required)
 - **Description**: Detailed task information (optional)
 - **Priority**: Low, Medium, or High priority levels
 - **Status**: To Do, In Progress, or Completed
 - **Timestamps**: Automatic creation and update tracking
+- **Data Persistence**: All tasks stored securely in MongoDB
+
+#### User Preferences
+- Theme preference (Light/Dark)
+- Notification settings
+- Personalized dashboard layout
+- Cross-device synchronization
 
 ## 🏗️ Project Structure
 
 ```
-src/
-├── components/          # Reusable UI components
-│   ├── Dashboard.tsx    # Main dashboard with stats and task grid
-│   ├── LoginForm.tsx    # Authentication form
-│   ├── Navbar.tsx       # Navigation bar with theme toggle
-│   ├── TaskCard.tsx     # Individual task display
-│   ├── TaskForm.tsx     # Task creation/editing modal
-│   ├── TaskFilters.tsx  # Advanced filtering interface
-│   ├── ProtectedRoute.tsx # Route protection wrapper
-│   └── LoadingSpinner.tsx # Loading state component
-├── contexts/            # React Context providers
-│   ├── AuthContext.tsx  # Authentication state management
+taskflow/
+├── src/                # Frontend source code
+│   ├── components/     # Reusable UI components
+│   │   ├── Dashboard.tsx       # Main dashboard with stats
+│   │   ├── LoginForm.tsx      # Authentication form
+│   │   ├── Navbar.tsx         # Navigation with theme toggle
+│   │   ├── TaskCard.tsx       # Task display component
+│   │   ├── TaskForm.tsx       # Task creation/editing
+│   │   ├── TaskFilters.tsx    # Filtering interface
+│   │   └── LoadingSpinner.tsx # Loading states
+│   ├── contexts/       # React Context providers
+│   │   ├── AuthContext.tsx    # Authentication state
+│   │   ├── TaskContext.tsx    # Task management
+│   │   └── ThemeContext.tsx   # Theme preferences
+│   └── utils/          # Utility functions
+│       └── api.ts      # API client configuration
+│
+└── server/            # Backend source code
+    ├── config/        # Configuration files
+    │   └── database.js # MongoDB configuration
+    ├── controllers/   # Route controllers
+    │   ├── authController.js  # Auth logic
+    │   └── taskController.js  # Task logic
+    ├── middleware/    # Express middleware
+    │   ├── auth.js           # JWT validation
+    │   └── errorHandler.js   # Error handling
+    ├── models/        # Mongoose models
+    │   ├── User.js          # User schema
+    │   ├── Task.js          # Task schema
+    │   └── Token.js         # JWT token schema
+    └── routes/        # API routes
+        ├── auth.js          # Auth endpoints
+        └── tasks.js         # Task endpoints
 │   ├── TaskContext.tsx  # Task CRUD operations
 │   └── ThemeContext.tsx # Theme state management
 ├── types/               # TypeScript type definitions
