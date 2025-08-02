@@ -13,6 +13,7 @@ import logger from './utils/logger.js';
 // Route imports
 import authRoutes from './routes/auth.js';
 import taskRoutes from './routes/tasks.js';
+import preferencesRoutes from './routes/preferences.js';
 
 // Load environment variables
 dotenv.config();
@@ -131,6 +132,7 @@ app.get('/health', (req, res) => {
 // API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
+app.use('/api/preferences', preferencesRoutes);
 
 // Handle undefined routes
 app.all('*', (req, res) => {
