@@ -49,8 +49,33 @@ A modern, full-featured task management application built with React, TypeScript
 
 ### Prerequisites
 - Node.js 18+
-- MongoDB 4.4+
+- MongoDB Atlas account
 - npm or yarn
+
+### MongoDB Atlas Setup
+1. Create a MongoDB Atlas account at https://www.mongodb.com/cloud/atlas
+2. Create a new cluster (FREE tier):
+   - Click "Build a Database"
+   - Choose "FREE" tier
+   - Select your preferred cloud provider
+   - Choose the closest region
+   - Click "Create"
+
+3. Set up database access:
+   - Go to "Database Access"
+   - Add new database user
+   - Create username and password
+   - Set privileges to "Atlas admin"
+
+4. Configure network access:
+   - Go to "Network Access"
+   - Add IP Address
+   - Allow access from anywhere (0.0.0.0/0) for development
+
+5. Get connection string:
+   - Click "Connect" on your cluster
+   - Choose "Connect your application"
+   - Copy the connection string
 
 ### Environment Setup
 
